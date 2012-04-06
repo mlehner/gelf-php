@@ -2,27 +2,6 @@
 
 namespace Gelf;
 
-interface IMessagePublisher {
-    /**
-     * Creates a new publisher that sends errors to a Graylog2 server via UDP
-     *
-     * @throws \InvalidArgumentException
-     * @param string $hostname
-     * @param integer $port
-     * @param integer $chunkSize
-     */
-    public function __construct($hostname, $port = self::GRAYLOG2_DEFAULT_PORT, $chunkSize = self::CHUNK_SIZE_WAN);
-
-    /**
-     * Publishes a Message, returns false if an error occured during write
-     *
-     * @throws UnexpectedValueException
-     * @param unknown_type $message
-     * @return boolean
-     */
-    public function publish(Message $message);
-}
-
 class MessagePublisher implements IMessagePublisher {
     /**
      * @var integer
