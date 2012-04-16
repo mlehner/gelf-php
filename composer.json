@@ -1,0 +1,14 @@
+{
+    "name": "mlehner/gelf-php",
+    "description": "Fork of gelf-php with PHP namespace support",
+    "authors": [
+        {
+            "name": "Matt Lehner",
+            "email": "matt.lehner@tellecore.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-0": {"Gelf": "src/"}
+    }
+}
