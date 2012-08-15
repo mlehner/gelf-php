@@ -205,7 +205,7 @@ class Message {
     public function setAdditional($key, $value) {
         if ($key == 'id')
         {
-            throw \InvalidArgumentException('The "id" additional field is not allowed.');
+            throw new \InvalidArgumentException('The "id" additional field is not allowed.');
         }
 
         $this->data["_" . trim($key)] = $value;
