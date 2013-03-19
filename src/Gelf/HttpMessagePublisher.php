@@ -34,6 +34,20 @@ class HttpMessagePublisher implements IMessagePublisher {
     protected $path;
     
     /**
+     * Use ssl
+     * 
+     * @var boolean
+     */
+    protected $ssl = false;
+    
+    /**
+     * Check certificates
+     * 
+     * @var boolean
+     */
+    protected $validateCert = true;
+    
+    /**
      * Creates an HttpMessagePublishes which can send Gelf\Message Objects to 
      * a Graylog2 server via HTTP
      * 
@@ -76,6 +90,7 @@ class HttpMessagePublisher implements IMessagePublisher {
         // create and send http request
         $httpRequest = $this->prepareHttpRequest($jsonMessage);
         $socket = $this->getSocket();
+        
         if (false === fwrite($socket, $httpRequest)) {
             throw new RuntimeException("fwrite failed");
         }
@@ -91,13 +106,13 @@ class HttpMessagePublisher implements IMessagePublisher {
      * @return string
      */
     protected function prepareHttpRequest($body) {
-        $request = "POST %s HTTP.1.1\r\n"
+        $request = "POST %s HTTP/1.1\r\n"
                  . "Host: %s\r\n"
                  . "Content-Type: application/json\r\n"
                  . "Content-Length: %d\r\n"
                  . "Connection: Close\r\n"
                  . "\r\n"
-                 . "%s";
+                 . "%s\r\n";
         
         return sprintf($request, $this->path, $this->host, strlen($body), $body);
     }
@@ -109,12 +124,47 @@ class HttpMessagePublisher implements IMessagePublisher {
      * @return resource
      */
     protected function getSocket() {
-        $socket = fsockopen($this->host, $this->port, $errno, $errstr);
+        $socketDescriptor = sprintf("%s://%s:%d", $this->ssl ? 'ssl' : 'tcp', $this->host, $this->port);
+        $context = stream_context_create();
+        
+        // add optional ssl context options
+        if ($this->ssl && !$this->validateCert) {
+            stream_context_set_option($context, "ssl", "allow_self_signed", true);
+            stream_context_set_option($context, "ssl", "verify_peer", false);
+        }
+        
+        // create socket
+        $socket = stream_socket_client(
+			$socketDescriptor, 
+            $errno, $errstr, 
+            ini_get("default_socket_timeout"), 
+            STREAM_CLIENT_CONNECT, 
+			$context
+        );
+        
         if (!$socket) {
-            throw new RuntimeException("fsockopen on {$this->host}:{$this->port} failed");
+            throw new RuntimeException("stream_socket_client on $socketDescriptor failed: $errstr ($errno)");
         }
         
         return $socket;
+    }
+    
+    /**
+     * Use an ssl-encrypted https connection
+     * 
+     * @param boolean $ssl
+     */
+    public function useSSL($ssl) {
+        $this->ssl = (boolean) $ssl;
+    }
+    
+    /**
+     * Validate ssl certificates
+     * 
+     * @param boolean $validate
+     */
+    public function validateSSLCert($validate) {
+        $this->validateCert = (boolean) $validate;
     }
     
     
