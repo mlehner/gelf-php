@@ -11,42 +11,42 @@ class Message {
     /**
      * @var integer
      */
-    private $timestamp = null;
+    private $timestamp = 0;
 
     /**
      * @var string
      */
-    private $shortMessage = null;
+    private $shortMessage = '';
 
     /**
      * @var string
      */
-    private $fullMessage = null;
+    private $fullMessage = '';
 
     /**
      * @var string
      */
-    private $facility = null;
+    private $facility = '';
 
     /**
      * @var string
      */
-    private $host = null;
+    private $host = '';
 
     /**
      * @var integer
      */
-    private $level = null;
+    private $level = 0;
 
     /**
      * @var string
      */
-    private $file = null;
+    private $file = '';
 
     /**
      * @var integer
      */
-    private $line = null;
+    private $line = 0;
 
     /**
      * @var array
@@ -223,16 +223,18 @@ class Message {
      * @return array
      */
     public function toArray() {
+        // Format according to specification: http://graylog2.org/gelf#specs
         $messageAsArray = array(
             'version' => $this->getVersion(),
             'timestamp' => $this->getTimestamp(),
             'short_message' => $this->getShortMessage(),
             'full_message' => $this->getFullMessage(),
-            'facility' => $this->getFacility(),
             'host' => $this->getHost(),
             'level' => $this->getLevel(),
-            'file' => $this->getFile(),
-            'line' => $this->getLine(),
+            // In v1.1 of spec, the following are deprecated.
+            '_file' => $this->getFile(),
+            '_facility' => $this->getFacility(),
+            '_line' => $this->getLine(),
         );
 
         foreach($this->data as $key => $value) {
