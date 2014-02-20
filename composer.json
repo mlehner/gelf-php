@@ -4,7 +4,10 @@
     "authors": [
         {
             "name": "Matt Lehner",
-            "email": "matt.lehner@tellecore.com"
+            "email": "matt.lehner@tellecore.com",
+            
+            "name": "Benjamin Zikarsky",
+            "email": "benjamin.zikarsky@perbility.de"
         }
     ],
     "require": {},

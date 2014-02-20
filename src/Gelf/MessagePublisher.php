@@ -21,11 +21,6 @@ class MessagePublisher implements IMessagePublisher {
     /**
      * @var string
      */
-    const GRAYLOG2_PROTOCOL_VERSION = '1.0';
-
-    /**
-     * @var string
-     */
     protected $hostname = null;
 
     /**
