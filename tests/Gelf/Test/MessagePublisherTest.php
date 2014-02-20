@@ -117,6 +117,9 @@ class MessagePublisherTest extends \PHPUnit_Framework_TestCase
         new MessagePublisher('localhost', 42, 'def');
     }
 
+    /**
+     * @requires function hex2bin
+     */
     public function testInternalPrependChunkInformation()
     {
         $method = new \ReflectionMethod('\Gelf\MessagePublisher', 'prependChunkInformation');
