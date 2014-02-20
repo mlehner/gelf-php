@@ -27,7 +27,7 @@ class MessageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(null, $this->message->getLine());
         $this->assertEquals(null, $this->message->getShortMessage());
         $this->assertEquals(null, $this->message->getTimestamp());
-        $this->assertEquals(1.0, $this->message->getVersion());
+        $this->assertEquals(1.1, $this->message->getVersion());
     }
 
     public function testSetAndGet()
@@ -58,11 +58,11 @@ class MessageTest extends \PHPUnit_Framework_TestCase
             'timestamp' => 123456789,
             'short_message' => 'Short Message',
             'full_message' => 'Full Message',
-            'facility' => 'facility',
             'host' => 'example.com',
             'level' => 3,
-            'file' => 'foo.php',
-            'line' => 42,
+            '_facility' => 'facility',
+            '_file' => 'foo.php',
+            '_line' => 42,
             '_foo' => 'bar',
           ),
           $this->message->toArray()

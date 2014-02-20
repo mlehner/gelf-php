@@ -7,7 +7,7 @@ class Message
     /**
      * @var string
      */
-    private $version = '1.0';
+    private $version = '1.1';
 
     /**
      * @var integer
@@ -27,11 +27,6 @@ class Message
     /**
      * @var string
      */
-    private $facility = null;
-
-    /**
-     * @var string
-     */
     private $host = null;
 
     /**
@@ -40,19 +35,9 @@ class Message
     private $level = null;
 
     /**
-     * @var string
-     */
-    private $file = null;
-
-    /**
-     * @var integer
-     */
-    private $line = null;
-
-    /**
      * @var array
      */
-    private $data = array();
+    private $additionals = array();
 
     /**
      * @param string $version
@@ -132,7 +117,7 @@ class Message
      */
     public function setFacility($facility)
     {
-        $this->facility = $facility;
+        $this->setAdditional('facility', $facility);
         return $this;
     }
 
@@ -141,7 +126,7 @@ class Message
      */
     public function getFacility()
     {
-        return $this->facility;
+        return $this->getAdditional('facility');
     }
 
     /**
@@ -186,7 +171,7 @@ class Message
      */
     public function setFile($file)
     {
-        $this->file = $file;
+        $this->setAdditional('file', $file);
         return $this;
     }
 
@@ -195,7 +180,7 @@ class Message
      */
     public function getFile()
     {
-        return $this->file;
+        return $this->getAdditional('file');
     }
 
     /**
@@ -204,7 +189,7 @@ class Message
      */
     public function setLine($line)
     {
-        $this->line = $line;
+        $this->setAdditional('line', $line);
         return $this;
     }
 
@@ -213,7 +198,7 @@ class Message
      */
     public function getLine()
     {
-        return $this->line;
+        return $this->getAdditional('line');
     }
 
     /**
@@ -228,7 +213,7 @@ class Message
             throw new \InvalidArgumentException('The "id" additional field is not allowed.');
         }
 
-        $this->data[$this->prepareKey($key)] = $value;
+        $this->additionals[$this->prepareKey($key)] = $value;
         return $this;
     }
 
@@ -239,7 +224,7 @@ class Message
     public function getAdditional($key)
     {
         $key = $this->prepareKey($key);
-        return isset($this->data[$key]) ? $this->data[$key] : null;
+        return isset($this->additionals[$key]) ? $this->additionals[$key] : null;
     }
 
     /**
@@ -247,23 +232,18 @@ class Message
      */
     public function toArray()
     {
-        $messageAsArray = array(
-          'version' => $this->getVersion(),
-          'timestamp' => $this->getTimestamp(),
-          'short_message' => $this->getShortMessage(),
-          'full_message' => $this->getFullMessage(),
-          'facility' => $this->getFacility(),
-          'host' => $this->getHost(),
-          'level' => $this->getLevel(),
-          'file' => $this->getFile(),
-          'line' => $this->getLine(),
+        // This will disallow additionals to overwrite the specified values.
+        return array_merge(
+          $this->additionals,
+          array(
+            'version' => $this->getVersion(),
+            'timestamp' => $this->getTimestamp(),
+            'short_message' => $this->getShortMessage(),
+            'full_message' => $this->getFullMessage(),
+            'host' => $this->getHost(),
+            'level' => $this->getLevel(),
+          )
         );
-
-        foreach ($this->data as $key => $value) {
-            $messageAsArray[$key] = $value;
-        }
-
-        return $messageAsArray;
     }
 
     /**
