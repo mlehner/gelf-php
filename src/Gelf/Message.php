@@ -203,7 +203,7 @@ class Message {
      * @return Message
      */
     public function setAdditional($key, $value) {
-        if ($key == 'id')
+        if ($key === 'id')
         {
             throw new \InvalidArgumentException('The "id" additional field is not allowed.');
         }
