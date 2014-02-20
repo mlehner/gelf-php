@@ -117,6 +117,18 @@ class MessagePublisherTest extends \PHPUnit_Framework_TestCase
         new MessagePublisher('localhost', 42, 'def');
     }
 
+    /**
+     * @requires function hex2bin
+     */
+    public function testInternalPrependChunkInformation()
+    {
+        $method = new \ReflectionMethod('\Gelf\MessagePublisher', 'prependChunkInformation');
+        $method->setAccessible(true);
+
+        $this->assertEquals(hex2bin('1e0fe48e13207341b6bf002a616263'), $method->invoke($this->publisher, 1337, 'abc', 0, 42));
+        $this->assertEquals(hex2bin('1e0fe48e13207341b6bf012a616263'), $method->invoke($this->publisher, 1337, 'abc', 1, 42));
+    }
+
     protected function setValuesToMessage(Message $message)
     {
         $message->setFacility('facility');

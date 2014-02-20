@@ -1,7 +1,7 @@
 mlehner/gelf-php
 ===================
 
-This library is abled to send GELF v1.0 Messages to compatible servers like a [Graylog2 Server](http://graylog2.org/).
+This library is abled to send [GELF v1.1](http://graylog2.org/gelf#specs) Messages to compatible servers like a [Graylog2 Server](http://graylog2.org/) in version v0.20.
 
 
 ## Status
@@ -15,7 +15,7 @@ Further development and new features are _not desired_ in favor of this newer fo
 
 Simply require the package by its name with composer:
 ```bash
-$ php composer.phar require mlehner/gelf-php "~1.0.0"
+$ php composer.phar require mlehner/gelf-php "~1.1.0"
 ```
 
 ## Usage
@@ -25,15 +25,16 @@ Example:
 ```php
 // Create a Message and set your logging information.
 $message = new Message();
-$message->setFacility('server42');
-$message->setFile('foo.php');
 $message->setFullMessage('Your full log mesage');
 $message->setHost('example.com');
 $message->setLevel(3); // List of supported levels: http://en.wikipedia.org/wiki/Syslog#Severity_levels
-$message->setLine(42);
 $message->setShortMessage('Short message');
 $message->setTimestamp(time());
 $message->setVersion('1.2.3');
+// The following values are deprecated and will be transferred as additionals.
+$message->setFile('foo.php');
+$message->setLine(42);
+$message->setFacility('server42');
 
 // Create a Publisher and send the message to your GELF server.
 // Beware: Hostnames need a DNS lookup, which might be slow!
@@ -45,3 +46,4 @@ $publisher->publish($message);
 ## License
 
 This bundle is licensed under MIT.
+
