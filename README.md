@@ -46,3 +46,4 @@ $publisher->publish($message);
 ## License
 
 This bundle is licensed under MIT.
+
