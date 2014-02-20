@@ -208,7 +208,7 @@ class Message {
             throw new \InvalidArgumentException('The "id" additional field is not allowed.');
         }
 
-        $this->data["_" . trim($key)] = $value;
+        $this->data[$this->prepareKey($key)] = $value;
         return $this;
     }
 
@@ -216,7 +216,8 @@ class Message {
      * @return mixed
      */
     public function getAdditional($key) {
-        return isset($this->data["_" . trim($key)]) ? $this->data[$key] : null;
+        $key = $this->prepareKey($key);
+        return isset($this->data[$key]) ? $this->data[$key] : null;
     }
 
     /**
@@ -240,5 +241,14 @@ class Message {
         }
 
         return $messageAsArray;
+    }
+
+    /**
+     * @param string $key
+     * @return string
+     */
+    private function prepareKey($key)
+    {
+        return '_' . trim($key);
     }
 }
