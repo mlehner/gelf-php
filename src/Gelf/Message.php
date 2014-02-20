@@ -224,11 +224,13 @@ class Message
      */
     public function setAdditional($key, $value)
     {
-        if ($key == 'id') {
+        $key = $this->prepareKey($key);
+
+        if ($key === '_id') {
             throw new \InvalidArgumentException('The "id" additional field is not allowed.');
         }
 
-        $this->data[$this->prepareKey($key)] = $value;
+        $this->data[$key] = $value;
         return $this;
     }
 
@@ -259,11 +261,7 @@ class Message
           'line' => $this->getLine(),
         );
 
-        foreach ($this->data as $key => $value) {
-            $messageAsArray[$key] = $value;
-        }
-
-        return $messageAsArray;
+        return array_replace($messageAsArray, $this->data);
     }
 
     /**
