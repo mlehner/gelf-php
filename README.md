@@ -1,6 +1,8 @@
 mlehner/gelf-php
 ===================
 
+[![Build Status](https://travis-ci.org/mlehner/gelf-php.png?branch=1.0)](https://travis-ci.org/mlehner/gelf-php)
+
 This library is abled to send GELF v1.0 Messages to compatible servers like a [Graylog2 Server](http://graylog2.org/).
 
 
