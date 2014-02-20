@@ -86,6 +86,14 @@ class MessageTest extends \PHPUnit_Framework_TestCase
         $this->message->setAdditional('id', 'baz');
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testInvalidAdditionalWithTrimming()
+    {
+        $this->message->setAdditional(' id ', 'baz');
+    }
+
     protected function setValuesToMessage(Message $message)
     {
         $message->setFacility('facility');

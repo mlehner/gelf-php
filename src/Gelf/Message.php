@@ -209,11 +209,13 @@ class Message
      */
     public function setAdditional($key, $value)
     {
-        if ($key == 'id') {
+        $key = $this->prepareKey($key);
+
+        if ('_id' == $key) {
             throw new \InvalidArgumentException('The "id" additional field is not allowed.');
         }
 
-        $this->additionals[$this->prepareKey($key)] = $value;
+        $this->additionals[$key] = $value;
         return $this;
     }
 
@@ -234,14 +236,16 @@ class Message
     {
         // This will disallow additionals to overwrite the specified values.
         return array_merge(
-          $this->additionals,
+          // Filter NULL values.
+          array_filter($this->additionals, function($v) { return !is_null($v); }),
           array(
             'version' => $this->getVersion(),
-            'timestamp' => $this->getTimestamp(),
             'short_message' => $this->getShortMessage(),
             'full_message' => $this->getFullMessage(),
             'host' => $this->getHost(),
-            'level' => $this->getLevel(),
+            // Ensure numeric values.
+            'timestamp' => (int)$this->getTimestamp(),
+            'level' => (int)$this->getLevel(),
           )
         );
     }
