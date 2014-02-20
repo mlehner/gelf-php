@@ -2,7 +2,8 @@
 
 namespace Gelf;
 
-class Message {
+class Message
+{
     /**
      * @var string
      */
@@ -57,7 +58,8 @@ class Message {
      * @param string $version
      * @return Message
      */
-    public function setVersion($version) {
+    public function setVersion($version)
+    {
         $this->version = $version;
         return $this;
     }
@@ -65,7 +67,8 @@ class Message {
     /**
      * @return string
      */
-    public function getVersion() {
+    public function getVersion()
+    {
         return $this->version;
     }
 
@@ -73,7 +76,8 @@ class Message {
      * @param integer $timestamp
      * @return Message
      */
-    public function setTimestamp($timestamp) {
+    public function setTimestamp($timestamp)
+    {
         $this->timestamp = $timestamp;
         return $this;
     }
@@ -81,7 +85,8 @@ class Message {
     /**
      * @return integer
      */
-    public function getTimestamp() {
+    public function getTimestamp()
+    {
         return $this->timestamp;
     }
 
@@ -89,7 +94,8 @@ class Message {
      * @param string $shortMessage
      * @return Message
      */
-    public function setShortMessage($shortMessage) {
+    public function setShortMessage($shortMessage)
+    {
         $this->shortMessage = $shortMessage;
         return $this;
     }
@@ -97,7 +103,8 @@ class Message {
     /**
      * @return string
      */
-    public function getShortMessage() {
+    public function getShortMessage()
+    {
         return $this->shortMessage;
     }
 
@@ -105,7 +112,8 @@ class Message {
      * @param string $fullMessage
      * @return Message
      */
-    public function setFullMessage($fullMessage) {
+    public function setFullMessage($fullMessage)
+    {
         $this->fullMessage = $fullMessage;
         return $this;
     }
@@ -113,7 +121,8 @@ class Message {
     /**
      * @return string
      */
-    public function getFullMessage() {
+    public function getFullMessage()
+    {
         return $this->fullMessage;
     }
 
@@ -121,7 +130,8 @@ class Message {
      * @param string $facility
      * @return Message
      */
-    public function setFacility($facility) {
+    public function setFacility($facility)
+    {
         $this->facility = $facility;
         return $this;
     }
@@ -129,7 +139,8 @@ class Message {
     /**
      * @return string
      */
-    public function getFacility() {
+    public function getFacility()
+    {
         return $this->facility;
     }
 
@@ -137,7 +148,8 @@ class Message {
      * @param string $host
      * @return Message
      */
-    public function setHost($host) {
+    public function setHost($host)
+    {
         $this->host = $host;
         return $this;
     }
@@ -145,7 +157,8 @@ class Message {
     /**
      * @return string
      */
-    public function getHost() {
+    public function getHost()
+    {
         return $this->host;
     }
 
@@ -153,7 +166,8 @@ class Message {
      * @param integer $level
      * @return Message
      */
-    public function setLevel($level) {
+    public function setLevel($level)
+    {
         $this->level = $level;
         return $this;
     }
@@ -161,7 +175,8 @@ class Message {
     /**
      * @return integer
      */
-    public function getLevel() {
+    public function getLevel()
+    {
         return $this->level;
     }
 
@@ -169,7 +184,8 @@ class Message {
      * @param string $file
      * @return Message
      */
-    public function setFile($file) {
+    public function setFile($file)
+    {
         $this->file = $file;
         return $this;
     }
@@ -177,7 +193,8 @@ class Message {
     /**
      * @return string
      */
-    public function getFile() {
+    public function getFile()
+    {
         return $this->file;
     }
 
@@ -185,7 +202,8 @@ class Message {
      * @param integer $line
      * @return Message
      */
-    public function setLine($line) {
+    public function setLine($line)
+    {
         $this->line = $line;
         return $this;
     }
@@ -193,18 +211,20 @@ class Message {
     /**
      * @return integer
      */
-    public function getLine() {
+    public function getLine()
+    {
         return $this->line;
     }
 
     /**
      * @param string $key
      * @param mixed $value
+     * @throws \InvalidArgumentException
      * @return Message
      */
-    public function setAdditional($key, $value) {
-        if ($key == 'id')
-        {
+    public function setAdditional($key, $value)
+    {
+        if ($key == 'id') {
             throw new \InvalidArgumentException('The "id" additional field is not allowed.');
         }
 
@@ -213,9 +233,11 @@ class Message {
     }
 
     /**
+     * @param $key
      * @return mixed
      */
-    public function getAdditional($key) {
+    public function getAdditional($key)
+    {
         $key = $this->prepareKey($key);
         return isset($this->data[$key]) ? $this->data[$key] : null;
     }
@@ -223,20 +245,21 @@ class Message {
     /**
      * @return array
      */
-    public function toArray() {
+    public function toArray()
+    {
         $messageAsArray = array(
-            'version' => $this->getVersion(),
-            'timestamp' => $this->getTimestamp(),
-            'short_message' => $this->getShortMessage(),
-            'full_message' => $this->getFullMessage(),
-            'facility' => $this->getFacility(),
-            'host' => $this->getHost(),
-            'level' => $this->getLevel(),
-            'file' => $this->getFile(),
-            'line' => $this->getLine(),
+          'version' => $this->getVersion(),
+          'timestamp' => $this->getTimestamp(),
+          'short_message' => $this->getShortMessage(),
+          'full_message' => $this->getFullMessage(),
+          'facility' => $this->getFacility(),
+          'host' => $this->getHost(),
+          'level' => $this->getLevel(),
+          'file' => $this->getFile(),
+          'line' => $this->getLine(),
         );
 
-        foreach($this->data as $key => $value) {
+        foreach ($this->data as $key => $value) {
             $messageAsArray[$key] = $value;
         }
 
@@ -244,6 +267,8 @@ class Message {
     }
 
     /**
+     * Returns the key for a Additional Value.
+     *
      * @param string $key
      * @return string
      */

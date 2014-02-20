@@ -2,12 +2,13 @@
 
 namespace Gelf;
 
-interface IMessagePublisher {
+interface IMessagePublisher
+{
     /**
      * Publishes a Message, returns false if an error occured during write
      *
-     * @throws UnexpectedValueException
-     * @param unknown_type $message
+     * @throws  \UnexpectedValueException
+     * @param Message $message
      * @return boolean
      */
     public function publish(Message $message);
