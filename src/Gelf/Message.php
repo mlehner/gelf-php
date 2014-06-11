@@ -244,7 +244,7 @@ class Message
             'full_message' => $this->getFullMessage(),
             'host' => $this->getHost(),
             // Ensure numeric values.
-            'timestamp' => (int)$this->getTimestamp(),
+            'timestamp' => (float)$this->getTimestamp(),
             'level' => (int)$this->getLevel(),
           )
         );
