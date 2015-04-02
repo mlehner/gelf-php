@@ -77,7 +77,7 @@ class MessagePublisher implements IMessagePublisher
     public function publish(Message $message)
     {
         // Check if required message parameters are set
-        if (!$message->getShortMessage() || !$message->getHost()) {
+        if (!strlen($message->getShortMessage()) || !$message->getHost()) {
             throw new \UnexpectedValueException(
               'Missing required data parameter: "version", "short_message" and "host" are required.'
             );
